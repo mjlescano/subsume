@@ -28,6 +28,35 @@ test('Subsume.parse()', t => {
 	});
 });
 
+test('Subsume.parseAll(str, ids)', t => {
+	const fixture = 'some@@[7febcd0b3806fbc48c01d7cea4ed1219]@@🦄##[7febcd0b3806fbc48c01d7cea4ed1219]## random text, more@@[2a6c72d2c5f6f5fe8f8534ad96d26b3f]@@🐴##[2a6c72d2c5f6f5fe8f8534ad96d26b3f]## random text';
+
+	const ids = [
+		'7febcd0b3806fbc48c01d7cea4ed1219',
+		'2a6c72d2c5f6f5fe8f8534ad96d26b3f'
+	];
+
+	t.deepEqual(Subsume.parseAll(fixture, ids), {
+		data: {
+			'7febcd0b3806fbc48c01d7cea4ed1219': '🦄',
+			'2a6c72d2c5f6f5fe8f8534ad96d26b3f': '🐴'
+		},
+		rest: 'some random text, more random text'
+	});
+});
+
+test('Subsume.parseAll(str)', t => {
+	const fixture = 'some@@[7febcd0b3806fbc48c01d7cea4ed1219]@@🦄##[7febcd0b3806fbc48c01d7cea4ed1219]## random text, more@@[2a6c72d2c5f6f5fe8f8534ad96d26b3f]@@🐴##[2a6c72d2c5f6f5fe8f8534ad96d26b3f]## random text';
+
+	t.deepEqual(Subsume.parseAll(fixture), {
+		data: {
+			'7febcd0b3806fbc48c01d7cea4ed1219': '🦄',
+			'2a6c72d2c5f6f5fe8f8534ad96d26b3f': '🐴'
+		},
+		rest: 'some random text, more random text'
+	});
+});
+
 test('Subsume#compose()', t => {
 	const subsume = new Subsume();
 	const text = subsume.compose('🦄');
